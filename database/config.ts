@@ -3,8 +3,9 @@ import mongoose from "mongoose";
 
 export const dbConnection = async () => {
     try {
+        const url: string = process.env.MONGO_CONNECTION + '';
         await mongoose.connect(   
-            process.env.MONGO_CONNECTION || ''
+            url
             ,
             () => {
                 console.log("MongoDB connected!")

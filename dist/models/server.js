@@ -23,8 +23,8 @@ class Server {
         };
         this.app = (0, express_1.default)();
         this.port = process.env.PORT || '8080';
-        this.dbConnection();
         this.middlewares();
+        this.dbConnection();
         this.routes();
     }
     dbConnection() {
