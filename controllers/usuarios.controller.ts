@@ -4,7 +4,7 @@ import Usuario from "../models/usuario";
 
 // get all users
 export const getUsuarios = async (req: Request, res: Response) => {
-    const usuarios = await Usuario.find();
+    const usuarios = await Usuario.find({ status: true });
 
     res.status(200).json({
         msg: 'GET | Usuarios',
@@ -49,7 +49,7 @@ export const updateUsuario = async (req: Request , res: Response) => {
 
         const foundUser = req.userAux; //recuperado del midleware de checar usuario si existe
         if(foundUser.email != email){
-            const existeEmail = await Usuario.findOne({ email: campos.email });
+            const existeEmail = await Usuario.findOne({ email});
             if( existeEmail ){
                 return res.status(400).json({
                     ok: false,
@@ -76,34 +76,14 @@ export const updateUsuario = async (req: Request , res: Response) => {
 
 // delete a specific user changing his status to false 
 export const deleteUsuario = async (req: Request , res: Response) => {
-    return res.status(200).json({
-        ok: true,
-        msg: 'DELETE | Usuario',
-        body: req.params
-    });
-
+    
     const uid = req.params.id;
     try {
-        // campos que no se pueden actualizar y se extraen los demás campos
-        const { google , status , role , img , password , email , ...campos} = req.body;
-
-        const foundUser = req.userAux; //recuperado del midleware de checar usuario si existe
-        if(foundUser.email != email){
-            const existeEmail = await Usuario.findOne({ email: campos.email });
-            if( existeEmail ){
-                return res.status(400).json({
-                    ok: false,
-                    msg: 'Este correo ya ha sido registrado'
-                });
-            }
-            campos.email = email;
-        }
-
-        const usuarioActualizado = await Usuario.findByIdAndUpdate( uid , campos , { new: true } );
+        const usuarioBorrado = await Usuario.findByIdAndUpdate( uid , { status: false } , { new: true } );
         res.status(200).json({
             ok: true,
-            msg: 'PUT | Usuarios',
-            usuarioActualizado
+            msg: 'DELETE | Usuario by id',
+            usuarioBorrado
         })
     } catch (error) {
         res.status(500).json({

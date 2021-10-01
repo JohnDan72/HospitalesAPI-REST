@@ -16,16 +16,18 @@ const UsuarioSchema = new Schema<User>({
 
     nombre: {
         type: String, 
-        required: true
+        required: true,
+        trim: true
     },
     email: { 
         type: String, 
         required: true,
-        unique: true
+        unique: true,
+        trim: true
     },
     password: { 
         type: String, 
-        required: true,
+        required: true
     },
     img: { 
         type: String

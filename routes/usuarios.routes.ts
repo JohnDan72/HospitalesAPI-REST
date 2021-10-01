@@ -10,9 +10,9 @@ import { validaUsuarioExiste } from "../middlewares/validacionesUsuario";
 const router = Router();
     router.get('/',[],getUsuarios);
     router.post('/',[
-        check('nombre','Nombre es requerido').not().isEmpty(),
-        check('email','Email es requerido').not().isEmpty(),
-        check('password','Password es requerido').not().isEmpty(),
+        check('nombre','Nombre es requerido').trim().not().isEmpty(),
+        check('email','Email es requerido').trim().not().isEmpty(),
+        check('password','Password es requerido').trim().not().isEmpty(),
         check('email').custom(checarEmailExiste),
         validarCampos
     ],crearUsuario);
@@ -22,9 +22,7 @@ const router = Router();
         validarCampos
     ],updateUsuario);
     router.delete('/:id',[
-        // check('id_user', 'Id no válido').isMongoId(),
-        // validaUsuarioExiste,
-        // validarCampos
+        validaUsuarioExiste
     ],deleteUsuario);
 
 export default router;
