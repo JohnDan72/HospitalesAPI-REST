@@ -1,6 +1,7 @@
 import { Request, Response } from "express"
 import bcrypt from "bcryptjs";
 import Usuario from "../models/usuario";
+import { generarJWT } from "../helpers/jwt";
 
 // get all users
 export const getUsuarios = async (req: Request, res: Response) => {
@@ -26,10 +27,14 @@ export const crearUsuario = async (req: Request, res: Response) => {
 
         await usuario.save();
 
+        // crear nuevo token
+        const token = await generarJWT(usuario._id);
+
         res.status(200).json({
             ok: true,
             msg: 'POST | Usuarios',
-            usuario
+            usuario,
+            token
         })
     } catch (error) {
         res.status(500).json({

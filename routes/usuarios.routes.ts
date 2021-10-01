@@ -6,9 +6,12 @@ import { check } from "express-validator";
 import { validarCampos } from "../middlewares/validarCampos";
 import { checarEmailExiste, checarEmailExisteLogin } from "../helpers/db-validators";
 import { validaUsuarioExiste } from "../middlewares/validacionesUsuario";
+import { validarJWT } from "../middlewares/validarJWT";
 
 const router = Router();
-    router.get('/',[],getUsuarios);
+    router.get('/',[
+        validarJWT
+    ],getUsuarios);
     router.post('/',[
         check('nombre','Nombre es requerido').trim().not().isEmpty(),
         check('email','Email es requerido').trim().not().isEmpty(),
@@ -17,11 +20,13 @@ const router = Router();
         validarCampos
     ],crearUsuario);
     router.put('/:id',[
+        validarJWT,
         // check('id_user', 'Id no válido').isMongoId(),
         validaUsuarioExiste,
         validarCampos
     ],updateUsuario);
     router.delete('/:id',[
+        validarJWT,
         validaUsuarioExiste
     ],deleteUsuario);
 

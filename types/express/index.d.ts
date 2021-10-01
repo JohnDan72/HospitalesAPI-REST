@@ -1,5 +1,7 @@
-declare namespace Express {
-    export interface Request {
-       userAux?: any
-    }
+declare namespace Express { 
+   export interface Request {
+     userAux?: any,
+     uid?: any
+   }
  }
+
