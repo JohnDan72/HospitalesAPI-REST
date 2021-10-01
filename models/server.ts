@@ -1,6 +1,8 @@
 import express, { Application } from "express";
 import userRoutes from "../routes/usuarios.routes";
 import loginRoutes from "../routes/login.routes";
+import hospitalRoutes from "../routes/hospitales.routes";
+import medicoRoutes from "../routes/medicos.routes";
 
 import { dbConnection } from "../database/config";
 import cors from "cors";
@@ -11,7 +13,9 @@ class Server {
     private port: string;
     private appPaths = {
         usuarios: '/api/usuarios',
-        login: '/api/login'
+        login: '/api/login',
+        hospitales: '/api/hospitales',
+        medicos: '/api/medicos'
     }
 
     constructor() {
@@ -41,6 +45,8 @@ class Server {
     routes(){
         this.app.use( this.appPaths.usuarios , userRoutes );
         this.app.use( this.appPaths.login , loginRoutes );
+        this.app.use( this.appPaths.hospitales , hospitalRoutes );
+        this.app.use( this.appPaths.medicos , medicoRoutes );
     }
 
     listen(){
