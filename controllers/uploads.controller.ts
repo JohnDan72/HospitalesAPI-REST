@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { v4 as uuidv4 } from 'uuid';
+import { updateImagen } from "../helpers/updateImage";
 
 export const uploadFile = (req: Request, res: Response) => {
     try {
         const tiposValidos = ['usuarios', 'hospitales', 'medicos'];
-        const { tipo, id } = req.query;
+        const { tipo, uid } = req.query;
         if (!tiposValidos.includes(String(tipo))) {
             return res.status(400).json({
                 ok: false,
@@ -34,21 +35,29 @@ export const uploadFile = (req: Request, res: Response) => {
         }
 
         // nombre único de la imagen
-        const nameFile = `${uuidv4()}.${extension}`;
-        const uploadPath = `./uploads/${tipo}/${nameFile}`;
+        const fileName = `${uuidv4()}.${extension}`;
+        const uploadPath = `./uploads/${tipo}/${fileName}`;
 
         // Use the mv() method to place the file somewhere on your server
-        file.mv(uploadPath, (err) => {
-            if (err)
+        file.mv(uploadPath, async (err) => {
+            if (err){
                 return res.status(500).json({
                     ok: false,
                     msg: `Error inesperado ${err}`
                 });
-
+            }
+            
+            const success = await updateImagen( <string>tipo , <string>uid , fileName);
+            if(!success){
+                return res.status(500).json({
+                    ok: false,
+                    msg: `parece que ocurrió un error en update image`
+                });
+            }
             res.status(200).json({
                 ok: true,
                 msg: 'PUT | Upload file successed',
-                nameFile
+                fileName
             });
         });
 
