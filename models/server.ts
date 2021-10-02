@@ -3,8 +3,11 @@ import userRoutes from "../routes/usuarios.routes";
 import loginRoutes from "../routes/login.routes";
 import hospitalRoutes from "../routes/hospitales.routes";
 import medicoRoutes from "../routes/medicos.routes";
-
+import busquedaRoutes from "../routes/busqueda.routes";
+import uploadRoutes from "../routes/uploads.routes";
+// db
 import { dbConnection } from "../database/config";
+// middlewares
 import cors from "cors";
 
 class Server {
@@ -15,7 +18,9 @@ class Server {
         usuarios: '/api/usuarios',
         login: '/api/login',
         hospitales: '/api/hospitales',
-        medicos: '/api/medicos'
+        medicos: '/api/medicos',
+        busqueda: '/api/busca',
+        uploads: '/api/upload'
     }
 
     constructor() {
@@ -47,6 +52,8 @@ class Server {
         this.app.use( this.appPaths.login , loginRoutes );
         this.app.use( this.appPaths.hospitales , hospitalRoutes );
         this.app.use( this.appPaths.medicos , medicoRoutes );
+        this.app.use( this.appPaths.busqueda , busquedaRoutes );
+        this.app.use( this.appPaths.uploads , uploadRoutes );
     }
 
     listen(){
