@@ -2,10 +2,14 @@ import { Request, Response } from "express";
 import { UploadedFile } from "express-fileupload";
 import { v4 as uuidv4 } from 'uuid';
 import { updateImagen } from "../helpers/updateImage";
+import path from "path";
+import fs from "fs";
+
+const tiposValidos = ['usuarios', 'hospitales', 'medicos'];
 
 export const uploadFile = (req: Request, res: Response) => {
     try {
-        const tiposValidos = ['usuarios', 'hospitales', 'medicos'];
+        
         const { tipo, uid } = req.query;
         if (!tiposValidos.includes(String(tipo))) {
             return res.status(400).json({
@@ -66,6 +70,33 @@ export const uploadFile = (req: Request, res: Response) => {
         return res.status(500).json({
             ok: false,
             msg: `Error inesperado ${error}`
+        })
+    }
+}
+
+export const getImage = ( req: Request , res: Response) => {
+    const { tipo , imagenName } = req.query;
+
+    try {
+
+        if (!tiposValidos.includes(String(tipo))) {
+            return res.status(400).json({
+                ok: false,
+                msg: `Bad request, permited types: ${tiposValidos}`
+            })
+        }
+        const pathImg = path.join( __dirname , `../../uploads/${tipo}/${imagenName}`)
+        
+        if( !fs.existsSync(pathImg) ){
+            const noImagePath = path.join( __dirname , `../../uploads/no-img.jpg`);
+            return res.sendFile( noImagePath );
+        }
+        
+        res.sendFile( pathImg );
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: `Error inesperado: ${error}`
         })
     }
 }
