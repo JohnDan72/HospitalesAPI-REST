@@ -3,6 +3,7 @@ import mongoose , { model, ObjectId, Schema } from "mongoose";
 interface Medic {
     nombre      : string;
     img         : string;
+    status      : boolean;
     createdByUser : ObjectId;
     hospital : ObjectId;
 }
@@ -14,6 +15,10 @@ const MedicoSchema = new Schema<Medic>({
     },
     img: {
         type: String,
+    },
+    status: {
+        type: Boolean,
+        default: true
     },
     createdByUser: {
         type: Schema.Types.ObjectId,

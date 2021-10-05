@@ -87,3 +87,24 @@ export const loginGoogle = async(req: Request, res: Response) => {
     }
 
 }
+
+
+export const renewToken = async ( req: Request , res: Response ) => {
+    try {
+        const uid = req.uid;
+
+        const renewedToken = await generarJWT(uid);
+
+        res.status(200).json({
+            ok: true,
+            msg: `GET | Renew Token`,
+            uid,
+            renewedToken
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            msg: `Error inesperado: ${error}`
+        });
+    }
+}
