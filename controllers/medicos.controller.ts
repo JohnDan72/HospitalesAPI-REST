@@ -3,31 +3,41 @@ import { Result } from "express-validator";
 import Medico from "../models/medico";
 
 
-export const getMedicos = async ( req: Request , res: Response) => {
-    
+export const getMedicos = async (req: Request, res: Response) => {
+
     try {
-        const medicos = await Medico.find()
-                                        .populate('createdByUser', 'nombre email status')
-                                        .populate('hospital', 'nombre createdByUser');
+        const { limit = 3, page = 0 } = req.query;
+        const desde: number = Number(limit) * Number(page);
+        const [medicos, total] = await Promise.all([
+            Medico.find({ status: true })
+                .populate('createdByUser', 'nombre email status')
+                .populate('hospital', 'nombre createdByUser')
+                .skip(desde)
+                .limit(Number(limit)),
+            Medico.countDocuments({ status: true })
+        ]);
+
         return res.status(200).json({
             ok: true,
-            msg: 'GET | Medicos',
+            msg: 'GET | Médicos',
+            total,
             medicos
         });
+
     } catch (error) {
         return res.status(500).json({
             ok: true,
             msg: `Error inesperado ${error}`
-        })   
+        })
     }
-    
+
 }
 
-export const createMedico = async ( req: Request , res: Response) => {
-    const { createdByUser , ...campos } = req.body;
+export const createMedico = async (req: Request, res: Response) => {
+    const { createdByUser, ...campos } = req.body;
     const uid = req.uid;
     try {
-        const medico = new Medico( campos );
+        const medico = new Medico(campos);
         medico.createdByUser = uid;
         medico.hospital = campos.id_hospital;
         await medico.save();
@@ -45,14 +55,14 @@ export const createMedico = async ( req: Request , res: Response) => {
     }
 }
 
-
 export const updateMedico = async (req: Request, res: Response) => {
-    const { createdByUser , ...campos } = req.body;
+    const { createdByUser, img , hospital, status , ...campos } = req.body;
     const uid = req.uid; //por si se requiere el usuario que esta actualizando
     try {
         const medico = req.medicoAux; //obtenido por las validaciones del middleware
-        
+
         medico.nombre = campos.nombre;
+        medico.hospital = campos.id_hospital;
         await medico.save();
 
         res.status(200).json({
@@ -67,11 +77,12 @@ export const updateMedico = async (req: Request, res: Response) => {
         })
     }
 }
+
 export const deleteMedico = async (req: Request, res: Response) => {
     const uid = req.uid; //por si se requiere el usuario que esta borrando
     try {
         const medico = req.medicoAux; //obtenido por las validaciones del middleware
-        
+
         medico.status = false;
         await medico.save();
 
@@ -88,9 +99,11 @@ export const deleteMedico = async (req: Request, res: Response) => {
     }
 }
 
-export const actualizarStatus = async ( req: Request , res: Response ) => {
-    
-    const medicos = await Medico.find();
+
+// aux function to set status: true to all documents of my schema
+export const actualizarStatus = async (req: Request, res: Response) => {
+
+    const medicos = await Medico.updateMany({},{status: true});
     // await medicos.save();
 
     res.status(200).json({
