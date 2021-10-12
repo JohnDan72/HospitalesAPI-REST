@@ -34,7 +34,8 @@ export const buscarGeneral = async (req: Request, res: Response) => {
             default:
                 return res.status(400).json({
                     ok: false,
-                    msg: 'Bad request'
+                    errors: [{msg: 'Bad request'}]
+                    
                 });
             
         }
@@ -48,7 +49,8 @@ export const buscarGeneral = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperdado ${error}`
+            errors: [{msg: `Error inesperdado ${error}`}]
+            
         });
     }
 }
@@ -85,7 +87,8 @@ export const buscarUsuarios = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperdado ${error}`
+            errors: [{msg: `Error inesperdado ${error}`}]
+            
         });
     }
 }
@@ -123,7 +126,8 @@ export const buscarHospitales = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperdado ${error}`
+            errors: [{msg: `Error inesperdado ${error}`}]
+            
         });
     }
 }
@@ -162,7 +166,8 @@ export const buscarMedicos = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperdado ${error}`
+            errors: [{msg: `Error inesperdado ${error}`}]
+            
         });
     }
 }

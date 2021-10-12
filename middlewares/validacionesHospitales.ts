@@ -11,14 +11,16 @@ export const validaHospitalExiste = async (req: Request , res: Response, next: N
         if(!mongoose.Types.ObjectId.isValid(id)){
             return res.status(400).json({
                 ok: false,
-                msg: `Id no valido`
+                errors: [{msg: `Id no valido`}]
+                
             });
         }
         const existeHospital = await Hospital.findOne({ _id: id, status: true });
         if (!existeHospital) {
             return res.status(400).json({
                 ok: false,
-                msg: `El hospital con id ${id} no existe`
+                errors: [{msg: `El hospital con id ${id} no existe`}]
+                
             });
         }
         req.hospitalAux = existeHospital;
@@ -26,7 +28,8 @@ export const validaHospitalExiste = async (req: Request , res: Response, next: N
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado: ${error}`
+            errors: [{msg: `Error inesperado: ${error}`}]
+            
         });
     }
 }

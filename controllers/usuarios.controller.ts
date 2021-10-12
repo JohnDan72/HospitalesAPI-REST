@@ -25,7 +25,8 @@ export const getUsuarios = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado ${error}`
+            errors: [{msg: `Error inesperado ${error}`}]
+            
         });
     }
 
@@ -57,7 +58,8 @@ export const crearUsuario = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Error inesperado: ' + error
+            errors: [{msg: 'Error inesperado: ' + error}]
+            
         })
     }
 
@@ -76,7 +78,8 @@ export const updateUsuario = async (req: Request, res: Response) => {
             if (existeEmail) {
                 return res.status(400).json({
                     ok: false,
-                    msg: 'Este correo ya ha sido registrado'
+                    errors: [{msg: 'Este correo ya ha sido registrado'}]
+                    
                 });
             }
             campos.email = email;
@@ -91,7 +94,8 @@ export const updateUsuario = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Error inesperado: ' + error
+            errors: [{msg: 'Error inesperado: ' + error}]
+            
         })
     }
 
@@ -111,7 +115,8 @@ export const deleteUsuario = async (req: Request, res: Response) => {
     } catch (error) {
         res.status(500).json({
             ok: false,
-            msg: 'Error inesperado: ' + error
+            errors: [{msg: 'Error inesperado: ' + error}]
+            
         })
     }
 

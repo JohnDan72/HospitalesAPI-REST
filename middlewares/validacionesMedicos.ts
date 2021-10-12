@@ -11,21 +11,24 @@ export const validaIdHospital = async ( req: Request , res: Response , next: Nex
         if(!mongoose.Types.ObjectId.isValid(id_hospital)){
             return res.status(400).json({
                 ok: false,
-                msg: `Id del hospital no valido`
+                errors: [{msg: `Id del hospital no valido`}]
+                
             });
         }
         const existeHospital = await Hospital.findOne({ _id: id_hospital, status: true});
         if(!existeHospital){
             return res.status(400).json({
                 ok: false,
-                msg: `El hospital con id ${id_hospital} no existe`
+                errors: [{msg: `El hospital con id ${id_hospital} no existe`}]
+                
             });
         }
         next();
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado ${error}`
+            errors: [{msg: `Error inesperado ${error}`}]
+            
         });
     }
 }
@@ -38,7 +41,8 @@ export const validaMedicoExiste = async (req: Request , res: Response, next: Nex
         if(!mongoose.Types.ObjectId.isValid(id)){ //validación del id médico
             return res.status(400).json({
                 ok: false,
-                msg: `Id del médico no valido`
+                errors: [{msg: `Id no valido`}]
+                
             });
         }
         
@@ -47,7 +51,8 @@ export const validaMedicoExiste = async (req: Request , res: Response, next: Nex
         if (!existeMedico) {
             return res.status(400).json({
                 ok: false,
-                msg: `El medico con id ${id} no existe`
+                errors: [{msg: `El medico con id ${id} no existe`}]
+                
             });
         }
         
@@ -56,7 +61,8 @@ export const validaMedicoExiste = async (req: Request , res: Response, next: Nex
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado: ${error}`
+            errors: [{msg: `Error inesperado: ${error}`}]
+            
         });
     }
 }

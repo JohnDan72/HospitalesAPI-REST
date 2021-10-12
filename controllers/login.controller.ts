@@ -16,7 +16,8 @@ export const login = async(req: Request, res: Response) => {
         if(!usuario){
             return res.status(400).json({
                 ok: false,
-                msg: 'Correo o contraseña inválido 1'
+                errors: [{msg: 'Correo o contraseña inválido 1'}]
+                
             });
         }
 
@@ -25,7 +26,8 @@ export const login = async(req: Request, res: Response) => {
         if(!validPassword){
             return res.status(400).json({
                 ok: false,
-                msg: 'Correo o contraseña inválido 2'
+                errors: [{msg: 'Correo o contraseña inválido 2'}]
+                
             });
         }
 
@@ -40,7 +42,8 @@ export const login = async(req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado ${error}`
+            errors: [{msg: `Error inesperado ${error}`}]
+            
         });
     }
 
@@ -82,7 +85,8 @@ export const loginGoogle = async(req: Request, res: Response) => {
     } catch (error) {
         return res.status(401).json({
             ok: false,
-            msg: `Token inválido: ${error}`
+            errors: [{msg: `Token inválido: ${error}`}]
+            
         });
     }
 
@@ -104,7 +108,8 @@ export const renewToken = async ( req: Request , res: Response ) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado: ${error}`
+            errors: [{msg: `Error inesperado: ${error}`}]
+            
         });
     }
 }

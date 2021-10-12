@@ -14,14 +14,16 @@ export const uploadFile = (req: Request, res: Response) => {
         if (!tiposValidos.includes(String(tipo))) {
             return res.status(400).json({
                 ok: false,
-                msg: `Bad request, permited types: ${tiposValidos}`
+                errors: [{msg: `Bad request, permited types: ${tiposValidos}`}]
+                
             })
         }
 
         if (!req.files || Object.keys(req.files).length === 0 || typeof req.files.imagen === 'undefined') {
             return res.status(400).json({
                 ok: false,
-                msg: 'Not files to upload'
+                errors: [{msg: 'Not files to upload'}]
+                
             });
         }
 
@@ -34,7 +36,8 @@ export const uploadFile = (req: Request, res: Response) => {
         if (!extensionesValidas.includes(extension)) {
             return res.status(400).json({
                 ok: false,
-                msg: `Accepted extentions: ${extensionesValidas}`
+                errors: [{msg: `Accepted extentions: ${extensionesValidas}`}]
+                
             });
         }
 
@@ -47,7 +50,8 @@ export const uploadFile = (req: Request, res: Response) => {
             if (err){
                 return res.status(500).json({
                     ok: false,
-                    msg: `Error inesperado ${err}`
+                    errors: [{msg: `Error inesperado ${err}`}]
+                    
                 });
             }
             
@@ -55,7 +59,8 @@ export const uploadFile = (req: Request, res: Response) => {
             if(!success){
                 return res.status(500).json({
                     ok: false,
-                    msg: `parece que ocurrió un error en update image`
+                    errors: [{msg: `parece que ocurrió un error en update image`}]
+                    
                 });
             }
             res.status(200).json({
@@ -69,7 +74,8 @@ export const uploadFile = (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado ${error}`
+            errors: [{msg: `Error inesperado ${error}`}]
+            
         })
     }
 }
@@ -82,7 +88,8 @@ export const getImage = ( req: Request , res: Response) => {
         if (!tiposValidos.includes(String(tipo))) {
             return res.status(400).json({
                 ok: false,
-                msg: `Bad request, permited types: ${tiposValidos}`
+                errors: [{msg: `Bad request, permited types: ${tiposValidos}`}]
+                
             })
         }
         const pathImg = path.join( __dirname , `../../uploads/${tipo}/${imagenName}`)
@@ -96,7 +103,8 @@ export const getImage = ( req: Request , res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado: ${error}`
+            errors: [{msg: `Error inesperado: ${error}`}]
+            
         })
     }
 }

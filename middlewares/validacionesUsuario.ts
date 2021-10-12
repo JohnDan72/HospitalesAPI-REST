@@ -11,14 +11,16 @@ export const validaUsuarioExiste = async (req: Request , res: Response, next: Ne
         if(!mongoose.Types.ObjectId.isValid(id)){
             return res.status(400).json({
                 ok: false,
-                msg: `Id no valido`
+                errors: [{msg: `Id no valido`}]
+                
             });
         }
         const existeUsuario = await Usuario.findOne({_id: id, status: true});
         if (!existeUsuario) {
             return res.status(400).json({
                 ok: false,
-                msg: `El usuario con id ${id} no existe`
+                errors: [{msg: `El usuario con id ${id} no existe`}]
+                
             });
         }
         req.userAux = existeUsuario;
@@ -26,7 +28,8 @@ export const validaUsuarioExiste = async (req: Request , res: Response, next: Ne
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Error inesperado: ${error}`
+            errors: [{msg: `Error inesperado: ${error}`}]
+            
         });
     }
 }

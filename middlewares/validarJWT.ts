@@ -9,7 +9,8 @@ export const validarJWT = (req: Request, res: Response, next: NextFunction) => {
     if(!tokenAcceso){
         return res.status(400).json({
             ok: false,
-            msg: `Token missed`
+            errors: [{msg: `Token missed`}]
+            
         })
     }
 
@@ -22,7 +23,8 @@ export const validarJWT = (req: Request, res: Response, next: NextFunction) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            msg: `Token no válido`
+            errors: [{msg: `Token no válido`}]
+            
         });
     }
 
