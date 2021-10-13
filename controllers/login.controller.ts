@@ -97,12 +97,16 @@ export const renewToken = async ( req: Request , res: Response ) => {
     try {
         const uid = req.uid;
 
-        const renewedToken = await generarJWT(uid);
+        const [ renewedToken , usuario ] = await Promise.all([
+            generarJWT(uid),
+            Usuario.findById( uid , 'nombre email role img')
+        ])
 
         res.status(200).json({
             ok: true,
             msg: `GET | Renew Token`,
             uid,
+            usuario,
             renewedToken
         });
     } catch (error) {
