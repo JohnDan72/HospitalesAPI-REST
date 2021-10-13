@@ -99,7 +99,7 @@ export const renewToken = async ( req: Request , res: Response ) => {
 
         const [ renewedToken , usuario ] = await Promise.all([
             generarJWT(uid),
-            Usuario.findById( uid , 'nombre email role img')
+            Usuario.findById( uid , 'nombre email role img google')
         ])
 
         res.status(200).json({

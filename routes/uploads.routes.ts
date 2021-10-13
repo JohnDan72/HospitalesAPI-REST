@@ -21,7 +21,7 @@ router.put('/', [
 ], uploadFile);
 
 router.get('/',[
-    validarJWT,
+    // validarJWT,
     check('imagenName', 'Campo requerido').trim().not().isEmpty(),
     validarCampos
 ], getImage)
