@@ -73,17 +73,29 @@ export const updateUsuario = async (req: Request, res: Response) => {
         const { google, status, role, img, password, email, ...campos } = req.body;
 
         const foundUser = req.userAux; //recuperado del midleware de checar usuario si existe
-        if (foundUser.email != email) {
-            const existeEmail = await Usuario.findOne({ email });
-            if (existeEmail) {
+        if(foundUser.google){ //usuario de google no pueden cambiar su email
+            if (foundUser.email != email) {
                 return res.status(400).json({
                     ok: false,
-                    errors: [{msg: 'Este correo ya ha sido registrado'}]
+                    errors: [{msg: 'Usuario de google, no puede cambiar su email'}]
                     
                 });
             }
-            campos.email = email;
         }
+        else{
+            if (foundUser.email != email) {
+                const existeEmail = await Usuario.findOne({ email });
+                if (existeEmail) {
+                    return res.status(400).json({
+                        ok: false,
+                        errors: [{msg: 'Este correo ya ha sido registrado'}]
+                        
+                    });
+                }
+                campos.email = email;
+            }
+        }
+
 
         const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
         res.status(200).json({
