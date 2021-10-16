@@ -10,25 +10,35 @@ export const buscarGeneral = async (req: Request, res: Response) => {
         const desde: number = Number(limit) * Number(page);
         const regex = new RegExp(<string>busqueda, 'i');
         let data: any[] = [];
+        let total: number = 0;
 
         switch (<string>collection) {
             case 'usuarios':
-                data = await Usuario.find({ nombre: regex })
+                [ data , total ] = await Promise.all([
+                    Usuario.find({ nombre: regex , status: true})
                     .skip(desde)
-                    .limit(Number(limit));
+                    .limit(Number(limit)),
+                    Usuario.countDocuments({ nombre: regex , status: true})
+                ]);
                 break;
             case 'hospitales':
-                data = await Hospital.find({ nombre: regex })
+                [ data , total ] = await Promise.all([
+                    data = await Hospital.find({ nombre: regex , status: true})
                     .populate('createdByUser', 'nombre email')
                     .skip(desde)
-                    .limit(Number(limit));
+                    .limit(Number(limit)),
+                    Hospital.countDocuments({ nombre: regex , status: true})
+                ]);
                 break;
             case 'medicos':
-                data = await Medico.find({ nombre: regex })
+                [ data , total ] = await Promise.all([
+                    data = await Medico.find({ nombre: regex , status: true})
                     .populate('createdByUser', 'nombre email')
                     .populate('hospital', 'nombre')
                     .skip(desde)
-                    .limit(Number(limit));
+                    .limit(Number(limit)),
+                    Medico.countDocuments({ nombre: regex , status: true})
+                ]);
                 break;
 
             default:
@@ -44,7 +54,8 @@ export const buscarGeneral = async (req: Request, res: Response) => {
             ok: true,
             msg: `GET búsqueda general`,
             params: req.query,
-            results: data
+            results: data,
+            total
         });
     } catch (error) {
         return res.status(500).json({

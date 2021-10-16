@@ -17,6 +17,7 @@ export const getUsuarios = async (req: Request, res: Response) => {
         ]);
 
         res.status(200).json({
+            ok: true,
             msg: 'GET | Usuarios',
             total, 
             usuarios
@@ -70,7 +71,7 @@ export const updateUsuario = async (req: Request, res: Response) => {
     const uid = req.params.id;
     try {
         // campos que no se pueden actualizar y se extraen los demás campos
-        const { google, status, role, img, password, email, ...campos } = req.body;
+        const { google, status, img, password, email, ...campos } = req.body;
 
         const foundUser = req.userAux; //recuperado del midleware de checar usuario si existe
         if(foundUser.google){ //usuario de google no pueden cambiar su email
@@ -118,6 +119,17 @@ export const deleteUsuario = async (req: Request, res: Response) => {
 
     const uid = req.params.id;
     try {
+        // comprobar si el solicitante es igual al usuario que se desea borrar
+        if(uid === req.uid){
+            return res.status(400).json({
+                ok: false,
+                errors: [
+                    {
+                        msg: 'No puedes borrarte a tí mismo'
+                    }
+                ]
+            })
+        }
         const usuarioBorrado = await Usuario.findByIdAndUpdate(uid, { status: false }, { new: true });
         res.status(200).json({
             ok: true,

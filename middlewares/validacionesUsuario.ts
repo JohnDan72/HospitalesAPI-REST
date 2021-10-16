@@ -33,3 +33,28 @@ export const validaUsuarioExiste = async (req: Request , res: Response, next: Ne
         });
     }
 }
+
+export const tieneRole = (...roles: string[]) => {
+    return (req: Request , res: Response, next: NextFunction) =>{
+        
+        try {
+            const { role } = req.userSolicitante;
+            if(!roles.includes(role)){
+                return res.status(400).json({
+                    ok: false,
+                    errors: [{msg: `No cuenta con los permisos requeridos`}]
+                    
+                });
+            }
+            
+            next();
+        } catch (error) {
+            return res.status(500).json({
+                ok: false,
+                errors: [{msg: `Error inesperado: ${error}`}]
+                
+            });
+        }
+
+    }
+}

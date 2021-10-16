@@ -5,7 +5,7 @@ import { getUsuarios, crearUsuario, updateUsuario, deleteUsuario } from '../cont
 import { check } from "express-validator";
 import { validarCampos } from "../middlewares/validarCampos";
 import { checarEmailExiste, checarEmailExisteLogin } from "../helpers/db-validators";
-import { validaUsuarioExiste } from "../middlewares/validacionesUsuario";
+import { tieneRole, validaUsuarioExiste } from "../middlewares/validacionesUsuario";
 import { validarJWT } from "../middlewares/validarJWT";
 
 const router = Router();
@@ -21,6 +21,7 @@ const router = Router();
     ],crearUsuario);
     router.put('/:id',[
         validarJWT,
+        tieneRole('ADMIN_ROLE'),
         // check('id_user', 'Id no válido').isMongoId(),
         validaUsuarioExiste,
         validarCampos
