@@ -24,7 +24,7 @@ export const buscarGeneral = async (req: Request, res: Response) => {
             case 'hospitales':
                 [ data , total ] = await Promise.all([
                     data = await Hospital.find({ nombre: regex , status: true})
-                    .populate('createdByUser', 'nombre email')
+                    .populate('createdByUser', 'nombre email role img google')
                     .skip(desde)
                     .limit(Number(limit)),
                     Hospital.countDocuments({ nombre: regex , status: true})
@@ -33,8 +33,8 @@ export const buscarGeneral = async (req: Request, res: Response) => {
             case 'medicos':
                 [ data , total ] = await Promise.all([
                     data = await Medico.find({ nombre: regex , status: true})
-                    .populate('createdByUser', 'nombre email')
-                    .populate('hospital', 'nombre')
+                    .populate('createdByUser', 'nombre email role img google')
+                    .populate('hospital', 'nombre img createdByUser')
                     .skip(desde)
                     .limit(Number(limit)),
                     Medico.countDocuments({ nombre: regex , status: true})
