@@ -34,7 +34,15 @@ export const buscarGeneral = async (req: Request, res: Response) => {
                 [ data , total ] = await Promise.all([
                     data = await Medico.find({ nombre: regex , status: true})
                     .populate('createdByUser', 'nombre email role img google')
-                    .populate('hospital', 'nombre img createdByUser')
+                    // .populate('hospital', 'nombre img createdByUser')
+                    .populate({
+                        path: 'hospital',
+                        populate: {
+                            path: 'createdByUser',
+                            select: 'nombre email role img google'
+                        },
+                        select: 'nombre img'
+                    })
                     .skip(desde)
                     .limit(Number(limit)),
                     Medico.countDocuments({ nombre: regex , status: true})

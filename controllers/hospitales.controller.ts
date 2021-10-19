@@ -89,3 +89,21 @@ export const deleteHospital = async (req: Request, res: Response) => {
         })
     }
 }
+
+// get all for select
+export const getAllHospitales = async (req: Request, res: Response) => {
+    try {
+        const allHospitales = await Hospital.find({status: true},'nombre');
+
+        res.status(200).json({
+            ok: true,
+            msg: 'GET | all hospitale\'s id',
+            hospitales: allHospitales
+        });
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            errors: [{msg: `Error inesperado: ${error}`}]
+        })
+    }
+}

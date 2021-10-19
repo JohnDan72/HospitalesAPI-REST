@@ -7,7 +7,9 @@ import { validaIdHospital, validaMedicoExiste, validaMedicoYHospitalExiste } fro
 
 
 const router = Router();
-router.get('/',[],getMedicos);
+router.get('/',[
+    validarJWT
+],getMedicos);
 
 router.post('/',[
     validarJWT,

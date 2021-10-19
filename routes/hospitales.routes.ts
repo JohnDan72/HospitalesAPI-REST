@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { check } from 'express-validator';
-import { createHospital, deleteHospital, getHospitales, updateHospital } from '../controllers/hospitales.controller';
+import { createHospital, deleteHospital, getAllHospitales, getHospitales, updateHospital } from '../controllers/hospitales.controller';
 import { validaHospitalExiste } from '../middlewares/validacionesHospitales';
 import { validarCampos } from '../middlewares/validarCampos';
 import { validarJWT } from '../middlewares/validarJWT';
@@ -11,6 +11,10 @@ const router = Router();
 router.get('/',[
     validarJWT
 ],getHospitales);
+
+router.get('/all',[
+    validarJWT
+],getAllHospitales);
 
 router.post('/',[
     validarJWT,
