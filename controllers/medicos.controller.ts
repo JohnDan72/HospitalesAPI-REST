@@ -101,6 +101,22 @@ export const deleteMedico = async (req: Request, res: Response) => {
 }
 
 
+// extra: get médico by id
+export const getMedicoById = (req: Request , res: Response) => {
+    try {
+        const medico = req.medicoAux;
+        res.status(200).json({
+            ok: true,
+            msg: 'GET | Médico By Id',
+            medico
+        })
+    } catch (error) {
+        return res.status(500).json({
+            ok: false,
+            errors: [{msg: `Error inesperado: ${error}`}]
+        });
+    }
+}
 // aux function to set status: true to all documents of my schema
 export const actualizarStatus = async (req: Request, res: Response) => {
 

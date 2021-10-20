@@ -93,7 +93,8 @@ export const deleteHospital = async (req: Request, res: Response) => {
 // get all for select
 export const getAllHospitales = async (req: Request, res: Response) => {
     try {
-        const allHospitales = await Hospital.find({status: true},'nombre');
+        const allHospitales = await Hospital.find({status: true},'nombre img')
+                                            .populate('createdByUser', 'nombre email role img google');
 
         res.status(200).json({
             ok: true,

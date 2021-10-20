@@ -46,7 +46,17 @@ export const validaMedicoExiste = async (req: Request , res: Response, next: Nex
             });
         }
         
-        const existeMedico = await Medico.findOne({ _id: id, status: true });
+        const existeMedico = await Medico.findOne({ _id: id, status: true })
+                                        .populate('createdByUser', 'nombre email role img google')
+                                        // .populate('hospital', 'nombre img createdByUser')
+                                        .populate({
+                                            path: 'hospital',
+                                            populate: {
+                                                path: 'createdByUser',
+                                                select: 'nombre email role img google'
+                                            },
+                                            select: 'nombre img'
+                                        });
 
         if (!existeMedico) {
             return res.status(400).json({
