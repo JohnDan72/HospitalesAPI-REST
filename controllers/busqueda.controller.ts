@@ -6,7 +6,7 @@ import Medico from "../models/medico";
 
 export const buscarGeneral = async (req: Request, res: Response) => {
     try {
-        const { limit = 3, page = 0, collection, busqueda } = req.query;
+        const { limit = 3, page = 0, collection = '-', busqueda } = req.query;
         const desde: number = Number(limit) * Number(page);
         const regex = new RegExp(<string>busqueda, 'i');
         let data: any[] = [];
@@ -23,7 +23,7 @@ export const buscarGeneral = async (req: Request, res: Response) => {
                 break;
             case 'hospitales':
                 [ data , total ] = await Promise.all([
-                    data = await Hospital.find({ nombre: regex , status: true})
+                    Hospital.find({ nombre: regex , status: true})
                     .populate('createdByUser', 'nombre email role img google')
                     .skip(desde)
                     .limit(Number(limit)),
@@ -32,7 +32,7 @@ export const buscarGeneral = async (req: Request, res: Response) => {
                 break;
             case 'medicos':
                 [ data , total ] = await Promise.all([
-                    data = await Medico.find({ nombre: regex , status: true})
+                    Medico.find({ nombre: regex , status: true})
                     .populate('createdByUser', 'nombre email role img google')
                     // .populate('hospital', 'nombre img createdByUser')
                     .populate({
@@ -49,10 +49,29 @@ export const buscarGeneral = async (req: Request, res: Response) => {
                 ]);
                 break;
 
-            default:
-                return res.status(400).json({
-                    ok: false,
-                    errors: [{msg: 'Bad request'}]
+            default: //búsqueda global
+                const [ usuarios, totalUsuarios , hospitales , totalHospitales , medicos , totalMedicos ] = await Promise.all([
+                    Usuario.find({ nombre: regex , status: true},'nombre img')
+                    .skip(desde)
+                    .limit(Number(limit)),
+                    Usuario.countDocuments({ nombre: regex , status: true}),
+                    Hospital.find({ nombre: regex , status: true},'nombre img')
+                    .skip(desde)
+                    .limit(Number(limit)),
+                    Hospital.countDocuments({ nombre: regex , status: true}),
+                    Medico.find({ nombre: regex , status: true},'nombre img')
+                    .skip(desde)
+                    .limit(Number(limit)),
+                    Medico.countDocuments({ nombre: regex , status: true})
+                ]);
+                return res.status(200).json({
+                    ok: true,
+                    usuarios,
+                    hospitales,
+                    medicos,
+                    totalUsuarios,
+                    totalHospitales,
+                    totalMedicos
                     
                 });
             
