@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { check } from "express-validator";
-import { login, loginGoogle, renewToken } from "../controllers/login.controller";
+import { getMenuFrontEnd, login, loginGoogle, renewToken } from "../controllers/login.controller";
 import { validarCampos } from "../middlewares/validarCampos";
 import { validarJWT } from '../middlewares/validarJWT';
 
@@ -19,8 +19,12 @@ router.post('/google',[
 ],loginGoogle);
 
 router.get('/renewToken',[
-    validarJWT
+    validarJWT,
 ],renewToken);
+
+router.get('/sidebarMenu',[
+    validarJWT
+],getMenuFrontEnd);
 
 
 export default router;
