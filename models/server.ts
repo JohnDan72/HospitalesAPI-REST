@@ -57,7 +57,7 @@ class Server {
         this.app.use( this.appPaths.uploads , uploadRoutes );
 
         this.app.use('*', (req ,res) => {
-            res.sendFile( path.resolve(__dirname,'public/index.html'));
+            res.sendFile( path.resolve(__dirname,'../../public/index.html'));
         });
     }
 
