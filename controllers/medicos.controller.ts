@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Result } from "express-validator";
 import Medico from "../models/medico";
 import Usuario from "../models/usuario";
+import Hospital from "../models/hospital";
 
 
 export const getMedicos = async (req: Request, res: Response) => {
@@ -120,13 +121,11 @@ export const getMedicoById = (req: Request , res: Response) => {
 // aux function to set status: true to all documents of my schema
 export const actualizarStatus = async (req: Request, res: Response) => {
 
-    const medicos = await Usuario.updateMany({},{status: true});
-// const medicos = await Medico.updateMany({},{status: true});
-    // await medicos.save();
+    const usuarios = await Usuario.updateMany({},{img: ''});
 
     res.status(200).json({
         ok: true,
         msg: 'Actualizar status',
-        medicos
+        usuarios
     });
 }

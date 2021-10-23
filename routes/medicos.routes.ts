@@ -36,6 +36,6 @@ router.delete('/:id',[
 ],deleteMedico);
 
 // this route is used to turn true all document's status
-// router.get('/actualizarStatus', actualizarStatus);
+// router.get('/:id/actualizarStatus', actualizarStatus);
 
-export default router;
+export default router; 
