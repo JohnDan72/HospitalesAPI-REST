@@ -9,7 +9,7 @@ import uploadRoutes from "../routes/uploads.routes";
 import { dbConnection } from "../database/config";
 // middlewares
 import cors from "cors";
-import fileUpload from "express-fileupload";
+import path from "path";
 
 class Server {
 
@@ -55,6 +55,10 @@ class Server {
         this.app.use( this.appPaths.medicos , medicoRoutes );
         this.app.use( this.appPaths.busqueda , busquedaRoutes );
         this.app.use( this.appPaths.uploads , uploadRoutes );
+
+        this.app.use('*', (req ,res) => {
+            res.sendFile( path.resolve(__dirname,'public/index.html'));
+        });
     }
 
     listen(){
