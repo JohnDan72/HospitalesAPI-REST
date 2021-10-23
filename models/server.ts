@@ -9,6 +9,7 @@ import uploadRoutes from "../routes/uploads.routes";
 import { dbConnection } from "../database/config";
 // middlewares
 import cors from "cors";
+import fileUpload from "express-fileupload";
 
 class Server {
 

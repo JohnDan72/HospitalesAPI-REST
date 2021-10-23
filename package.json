@@ -11,12 +11,15 @@
     "watch-ts": "tsc -w",
     "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
-  "engines": { "node": "12.19.0" },
+  "engines": {
+    "node": "12.19.0"
+  },
   "keywords": [],
   "author": "Juan Daniel García López",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.27.1",
     "cors": "^2.8.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
