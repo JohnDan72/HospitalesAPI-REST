@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start:dev": "nodemon ./dist/app.js"
+    "start:dev": "nodemon ./dist/app.js",
+    "start": "node ./dist/app.js"
   },
   "keywords": [],
   "author": "Juan Daniel García López",
