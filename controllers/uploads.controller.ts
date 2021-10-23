@@ -149,7 +149,8 @@ export const updateImgUserCloudinary = async (req: Request, res: Response) => {
         res.status(200).json({
             ok: true,
             msg: `Upload success!! ${req.query.tipo}`,
-            modelo
+            modelo,
+            fileName: modelo.img
         })
     } catch (error) {
         return res.status(500).json({
