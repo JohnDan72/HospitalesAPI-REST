@@ -1,46 +1,58 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="google-signin-client_id"
-        content="158261091800-m526c21nh4aik8gksbvaksbv0tb2hgab.apps.googleusercontent.com">
+  <meta charset="utf-8">
+  <title>Admin-Pro</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="google-signin-client_id" content="158261091800-m526c21nh4aik8gksbvaksbv0tb2hgab.apps.googleusercontent.com">
+  <script src="https://apis.google.com/js/platform.js" async="" defer=""></script>
 
-    <title>Demo Sign In</title>
-</head>
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+  <!-- Favicon icon -->
+  <link rel="icon" type="image/png" sizes="16x16" href="assets/images/favicon.png">
 
-<body>
-    <h2>Google Sign In</h2>
+  <!-- Bootstrap Core CSS -->
+  <link href="./assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom CSS -->
+  <link href="./assets/css/style.css" rel="stylesheet">
+  <!-- You can change the theme colors from here -->
+  <link id="theme" rel="stylesheet">
+<link rel="stylesheet" href="styles.bc8c8e0a39417bfe3dc1.css"></head>
+<body class="fix-header card-no-border fix-sidebar">
+  <div class="preloader">
+    <div class="loader">
+        <div class="loader__figure"></div>
+        <p class="loader__label">Admin Pro</p>
+    </div>
+  </div>
 
-    <div class="g-signin2" data-onsuccess="onSignIn"></div>
+  <app-root></app-root>
 
-    <a href="#" onclick="signOut();">Sign out</a>
-    
-    
-    <!-- Google sign library -->
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
 
-    <script>
-        function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-            console.log('Name: ' + profile.getName());
-            console.log('Image URL: ' + profile.getImageUrl());
-            console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+  <!-- All Jquery -->
+    <!-- ============================================================== -->
+    <script src="./assets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap tether Core JavaScript -->
+    <script src="./assets/plugins/bootstrap/js/popper.min.js"></script>
+    <script src="./assets/plugins/bootstrap/js/bootstrap.min.js"></script>
+    <!-- slimscrollbar scrollbar JavaScript -->
+    <script src="./assets/js/perfect-scrollbar.jquery.min.js"></script>
+    <!--Wave Effects -->
+    <script src="./assets/js/waves.js"></script>
+    <!--Menu sidebar -->
+    <script src="./assets/js/sidebarmenu.js"></script>
+    <!--stickey kit -->
+    <script src="./assets/plugins/sticky-kit-master/dist/sticky-kit.min.js"></script>
+    <script src="./assets/plugins/sparkline/jquery.sparkline.min.js"></script>
+    <!--Custom JavaScript -->
+    <script src="./assets/js/custom.js"></script>
+    <!-- ============================================================== -->
+    <!-- Style switcher -->
+    <!-- ============================================================== -->
+    <!-- <script src="./assets/plugins/styleswitcher/jQuery.style.switcher.js"></script> -->
+    <!-- Chart JS -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
 
-            var id_token = googleUser.getAuthResponse().id_token;
-            console.log(id_token);
-        }
-        // cerrar sesión
-        function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
-                console.log('User signed out.');
-            });
-        }
-    </script>
-</body>
-
+  <script src="runtime.6d7cda558376bfea944d.js" defer></script><script src="polyfills.94daefd414b8355106ab.js" defer></script><script src="main.dfd996d69a7e4e2b5612.js" defer></script></body>
 </html>
