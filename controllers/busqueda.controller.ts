@@ -14,55 +14,55 @@ export const buscarGeneral = async (req: Request, res: Response) => {
 
         switch (<string>collection) {
             case 'usuarios':
-                [ data , total ] = await Promise.all([
-                    Usuario.find({ nombre: regex , status: true})
-                    .skip(desde)
-                    .limit(Number(limit)),
-                    Usuario.countDocuments({ nombre: regex , status: true})
+                [data, total] = await Promise.all([
+                    Usuario.find({ nombre: regex, status: true })
+                        .skip(desde)
+                        .limit(Number(limit)),
+                    Usuario.countDocuments({ nombre: regex, status: true })
                 ]);
                 break;
             case 'hospitales':
-                [ data , total ] = await Promise.all([
-                    Hospital.find({ nombre: regex , status: true})
-                    .populate('createdByUser', 'nombre email role img google')
-                    .skip(desde)
-                    .limit(Number(limit)),
-                    Hospital.countDocuments({ nombre: regex , status: true})
+                [data, total] = await Promise.all([
+                    Hospital.find({ nombre: regex, status: true })
+                        .populate('createdByUser', 'nombre email role img google')
+                        .skip(desde)
+                        .limit(Number(limit)),
+                    Hospital.countDocuments({ nombre: regex, status: true })
                 ]);
                 break;
             case 'medicos':
-                [ data , total ] = await Promise.all([
-                    Medico.find({ nombre: regex , status: true})
-                    .populate('createdByUser', 'nombre email role img google')
-                    // .populate('hospital', 'nombre img createdByUser')
-                    .populate({
-                        path: 'hospital',
-                        populate: {
-                            path: 'createdByUser',
-                            select: 'nombre email role img google'
-                        },
-                        select: 'nombre img'
-                    })
-                    .skip(desde)
-                    .limit(Number(limit)),
-                    Medico.countDocuments({ nombre: regex , status: true})
+                [data, total] = await Promise.all([
+                    Medico.find({ nombre: regex, status: true })
+                        .populate('createdByUser', 'nombre email role img google')
+                        // .populate('hospital', 'nombre img createdByUser')
+                        .populate({
+                            path: 'hospital',
+                            populate: {
+                                path: 'createdByUser',
+                                select: 'nombre email role img google'
+                            },
+                            select: 'nombre img'
+                        })
+                        .skip(desde)
+                        .limit(Number(limit)),
+                    Medico.countDocuments({ nombre: regex, status: true })
                 ]);
                 break;
 
             default: //búsqueda global
-                const [ usuarios, totalUsuarios , hospitales , totalHospitales , medicos , totalMedicos ] = await Promise.all([
-                    Usuario.find({ nombre: regex , status: true},'nombre img')
-                    .skip(desde)
-                    .limit(Number(limit)),
-                    Usuario.countDocuments({ nombre: regex , status: true}),
-                    Hospital.find({ nombre: regex , status: true},'nombre img')
-                    .skip(desde)
-                    .limit(Number(limit)),
-                    Hospital.countDocuments({ nombre: regex , status: true}),
-                    Medico.find({ nombre: regex , status: true},'nombre img')
-                    .skip(desde)
-                    .limit(Number(limit)),
-                    Medico.countDocuments({ nombre: regex , status: true})
+                const [usuarios, totalUsuarios, hospitales, totalHospitales, medicos, totalMedicos] = await Promise.all([
+                    Usuario.find({ nombre: regex, status: true }, 'nombre img')
+                        .skip(desde)
+                        .limit(Number(limit)),
+                    Usuario.countDocuments({ nombre: regex, status: true }),
+                    Hospital.find({ nombre: regex, status: true }, 'nombre img')
+                        .skip(desde)
+                        .limit(Number(limit)),
+                    Hospital.countDocuments({ nombre: regex, status: true }),
+                    Medico.find({ nombre: regex, status: true }, 'nombre img')
+                        .skip(desde)
+                        .limit(Number(limit)),
+                    Medico.countDocuments({ nombre: regex, status: true })
                 ]);
                 return res.status(200).json({
                     ok: true,
@@ -72,9 +72,9 @@ export const buscarGeneral = async (req: Request, res: Response) => {
                     totalUsuarios,
                     totalHospitales,
                     totalMedicos
-                    
+
                 });
-            
+
         }
 
         res.status(200).json({
@@ -87,8 +87,8 @@ export const buscarGeneral = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            errors: [{msg: `Error inesperdado ${error}`}]
-            
+            errors: [{ msg: `Error inesperdado ${error}` }]
+
         });
     }
 }
@@ -100,7 +100,7 @@ export const buscarUsuarios = async (req: Request, res: Response) => {
 
         // si es mongo_id se retorna el resultado
         if (mongoose.Types.ObjectId.isValid(<string>busqueda)) {
-            const usuario = await Usuario.findOne({ _id: busqueda });
+            const usuario = await Usuario.findOne({ _id: busqueda , status: true});
             return res.status(200).json({
                 ok: true,
                 msg: 'GET only user by id',
@@ -112,7 +112,7 @@ export const buscarUsuarios = async (req: Request, res: Response) => {
 
         const desde: number = Number(limit) * Number(page);
         const regex = new RegExp(<string>busqueda, 'i');
-        const usuarios = await Usuario.find({ nombre: regex })
+        const usuarios = await Usuario.find({ nombre: regex , status: true})
             .skip(desde)
             .limit(Number(limit));
 
@@ -125,8 +125,8 @@ export const buscarUsuarios = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            errors: [{msg: `Error inesperdado ${error}`}]
-            
+            errors: [{ msg: `Error inesperdado ${error}` }]
+
         });
     }
 }
@@ -138,7 +138,8 @@ export const buscarHospitales = async (req: Request, res: Response) => {
 
         // si es mongo_id se retorna el resultado
         if (mongoose.Types.ObjectId.isValid(<string>busqueda)) {
-            const hospital = await Hospital.findOne({ _id: busqueda });
+            const hospital = await Hospital.findOne({ _id: busqueda , status: true})
+                .populate('createdByUser', 'nombre email role img google');
             return res.status(200).json({
                 ok: true,
                 msg: 'GET only hospital by id',
@@ -150,7 +151,7 @@ export const buscarHospitales = async (req: Request, res: Response) => {
 
         const desde: number = Number(limit) * Number(page);
         const regex = new RegExp(<string>busqueda, 'i');
-        const hospitales = await Hospital.find({ nombre: regex })
+        const hospitales = await Hospital.find({ nombre: regex , status: true})
             .populate('createdByUser', 'nombre email')
             .skip(desde)
             .limit(Number(limit));
@@ -164,8 +165,8 @@ export const buscarHospitales = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            errors: [{msg: `Error inesperdado ${error}`}]
-            
+            errors: [{ msg: `Error inesperdado ${error}` }]
+
         });
     }
 }
@@ -177,7 +178,16 @@ export const buscarMedicos = async (req: Request, res: Response) => {
 
         // si es mongo_id se retorna el resultado
         if (mongoose.Types.ObjectId.isValid(<string>busqueda)) {
-            const medico = await Medico.findOne({ _id: busqueda });
+            const medico = await Medico.findOne({ _id: busqueda , status: true})
+                .populate('createdByUser', 'nombre email role img google')
+                .populate({
+                    path: 'hospital',
+                    populate: {
+                        path: 'createdByUser',
+                        select: 'nombre email role img google'
+                    },
+                    select: 'nombre img'
+                });
             return res.status(200).json({
                 ok: true,
                 msg: 'GET only medico by id',
@@ -189,9 +199,16 @@ export const buscarMedicos = async (req: Request, res: Response) => {
 
         const desde: number = Number(limit) * Number(page);
         const regex = new RegExp(<string>busqueda, 'i');
-        const medicos = await Medico.find({ nombre: regex })
-            .populate('createdByUser', 'nombre email')
-            .populate('hospital', 'nombre')
+        const medicos = await Medico.find({ nombre: regex , status: true})
+            .populate('createdByUser', 'nombre email role img google')
+            .populate({
+                path: 'hospital',
+                populate: {
+                    path: 'createdByUser',
+                    select: 'nombre email role img google'
+                },
+                select: 'nombre img'
+            })
             .skip(desde)
             .limit(Number(limit));
 
@@ -204,8 +221,8 @@ export const buscarMedicos = async (req: Request, res: Response) => {
     } catch (error) {
         return res.status(500).json({
             ok: false,
-            errors: [{msg: `Error inesperdado ${error}`}]
-            
+            errors: [{ msg: `Error inesperdado ${error}` }]
+
         });
     }
 }
